@@ -3,7 +3,7 @@ import { injectLayout, setContent, escapeHTML } from './app.js';
 const BACKEND_URL = 'https://studenthub-backend-rpn0.onrender.com';
 const SJSU_EVENTS_API = 'https://events.sjsu.edu/api/2/events';
 
-const DEFAULT_EVENT_IMAGE = '../assets/images/event-placeholder.png';
+const DEFAULT_EVENT_IMAGE = 'assets/images/event-placeholder.png';
 const SJSU_LOGO = '../assets/images/sjsu-logo.png';
 
 function mapLocalEvent(event) {
