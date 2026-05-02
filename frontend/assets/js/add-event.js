@@ -5,10 +5,12 @@ import { SJSU_LOCATIONS } from './data/sjsu-location.js';
 
 const BACKEND_URL = 'https://studenthub-backend-rpn0.onrender.com';
 
-function getLocationOptions() {
-  return SJSU_LOCATIONS.map(
-    (location) => `<option value="${location}">${location}</option>`
-  ).join('');
+function getLocationOptions(selectedBuilding = '') {
+  return SJSU_LOCATIONS.map((location) => `
+    <option value="${location.name}" ${location.name === selectedBuilding ? 'selected' : ''}>
+      ${location.name}
+    </option>
+  `).join('');
 }
 
 function init() {
