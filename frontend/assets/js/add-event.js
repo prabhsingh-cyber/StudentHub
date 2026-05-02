@@ -1,5 +1,5 @@
 import { injectLayout, setContent } from './app.js';
-import { SJSU_LOCATIONS } from './data/sjsu-locations.js';
+import { SJSU_LOCATIONS } from './data/sjsu-location.js';
 
 // if (!requireLogin()) return;
 
