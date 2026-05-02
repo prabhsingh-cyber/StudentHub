@@ -40,8 +40,8 @@ function splitLocation(location = '') {
 
 function getLocationOptions(selectedBuilding = '') {
   return SJSU_LOCATIONS.map((location) => `
-    <option value="${location}" ${location === selectedBuilding ? 'selected' : ''}>
-      ${location}
+    <option value="${location.name}" ${location.name === selectedBuilding ? 'selected' : ''}>
+      ${location.name}
     </option>
   `).join('');
 }

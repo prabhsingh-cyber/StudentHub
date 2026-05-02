@@ -1,10 +1,26 @@
 import { injectLayout, setContent, escapeHTML } from './app.js';
+import { SJSU_LOCATIONS } from './data/sjsu-location.js';
 
 const BACKEND_URL = 'https://studenthub-backend-rpn0.onrender.com';
 
-function buildMapEmbedUrl(location) {
+function getBuildingFromLocation(location = '') {
+  return location.split(', Room')[0].trim();
+}
+
+function buildMapEmbedUrl(location = '') {
   if (!location) return '';
-  return `https://www.google.com/maps?q=${encodeURIComponent(location)}&output=embed`;
+
+  const building = getBuildingFromLocation(location);
+
+  const matchedLocation = SJSU_LOCATIONS.find(
+    (item) => item.name.toLowerCase() === building.toLowerCase()
+  );
+
+  const mapQuery = matchedLocation
+    ? matchedLocation.mapQuery
+    : `${building}, San Jose State University, San Jose, CA`;
+
+  return `https://www.google.com/maps?q=${encodeURIComponent(mapQuery)}&output=embed`;
 }
 
 function renderSjsuEventFromQuery() {
