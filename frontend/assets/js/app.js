@@ -33,7 +33,43 @@ function getNavItems() {
     { href: 'deals.html', label: 'Deals' }
   ];
 }
+export function formatTimeframe(timeframe = '') {
+  const [datePart, timePart] = timeframe.split(' • ');
 
+  if (!datePart) return timeframe;
+
+  // Format date
+  const date = new Date(datePart);
+  const formattedDate = date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  });
+
+  if (!timePart) return formattedDate;
+
+  let start = '';
+  let end = '';
+
+  if (timePart.includes(' - ')) {
+    [start, end] = timePart.split(' - ');
+  } else {
+    start = timePart;
+  }
+
+  const formatTime = (t) => {
+    if (!t) return '';
+    const [h, m] = t.split(':');
+    const dateObj = new Date();
+    dateObj.setHours(h, m);
+    return dateObj.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit'
+    });
+  };
+
+  return `${formattedDate} • ${formatTime(start)}${end ? ' - ' + formatTime(end) : ''}`;
+}
 export function injectLayout(activePage = '', layoutType = 'full') {
   const navItems = getNavItems();
   const app = document.querySelector('[data-app]');

@@ -36,6 +36,19 @@ function init() {
         </div>
 
         <div class="form-row">
+  <div class="form-group">
+    <label for="startTime">Start Time</label>
+    <input id="startTime" name="startTime" type="time" required>
+  </div>
+
+  <div class="form-group">
+    <label for="endTime">End Time</label>
+    <input id="endTime" name="endTime" type="time" required>
+    <small class="error-text" id="end-time-error"></small>
+  </div>
+</div>
+
+        <div class="form-row">
           <div class="form-group">
             <label for="locationBuilding">Building</label>
             <select id="locationBuilding" name="locationBuilding" required>
@@ -73,6 +86,9 @@ function init() {
 
   const eventDateInput = document.getElementById('eventDate');
   const eventDateError = document.getElementById('event-date-error');
+  const startTimeInput = document.getElementById('startTime');
+  const endTimeInput = document.getElementById('endTime');
+  const endTimeError = document.getElementById('end-time-error');
 
   const today = new Date();
   const minDate = new Date();
@@ -90,6 +106,19 @@ function init() {
       eventDateInput.classList.remove('invalid');
     }
   });
+  endTimeInput.addEventListener('change', () => {
+  if (
+    startTimeInput.value &&
+    endTimeInput.value &&
+    endTimeInput.value <= startTimeInput.value
+  ) {
+    endTimeError.textContent = 'End time must be after start time.';
+    endTimeInput.classList.add('invalid');
+  } else {
+    endTimeError.textContent = '';
+    endTimeInput.classList.remove('invalid');
+  }
+});
 
   document.getElementById('event-form').addEventListener('submit', async (event) => {
   event.preventDefault();
@@ -106,17 +135,23 @@ function init() {
   const building = document.getElementById('locationBuilding').value;
   const room = document.getElementById('locationRoom').value.trim();
   const description = document.getElementById('description').value.trim();
+  const startTime = document.getElementById('startTime').value;
+  const endTime = document.getElementById('endTime').value;
 
   const location = room ? `${building}, Room ${room}` : building;
-
+  if (endTime <= startTime) {
+  alert('End time must be after start time.');
+  return;
+}
   const formData = new FormData();
 
   formData.append("item_name", title);
   formData.append("item_desc", description);
-  formData.append("is_timed", "false"); // simple case
-  formData.append("timeframe", eventDate);
+  
   formData.append("loc_content", location);
 
+formData.append("is_timed", "true");
+formData.append("timeframe", `${eventDate} • ${startTime} - ${endTime}`);
   const file = document.getElementById("eventImage").files[0];
   if (file) {
     formData.append("image", file);

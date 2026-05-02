@@ -1,4 +1,4 @@
-import { injectLayout, setContent, escapeHTML } from './app.js';
+import { injectLayout, setContent, escapeHTML, formatTimeframe } from './app.js';
 
 const BACKEND_URL = 'https://studenthub-backend-rpn0.onrender.com';
 const SJSU_EVENTS_API = 'https://events.sjsu.edu/api/2/events';
@@ -116,7 +116,13 @@ function renderEventCard(event) {
           <span>Posted by ${escapeHTML(event.user_name)}</span>
         </div>
 
-        <div class="meta">📅 <span>${escapeHTML(event.timeframe)}</span></div>
+        <div class="meta">
+  📅 <span>${escapeHTML(
+    event.source === 'local'
+      ? formatTimeframe(event.timeframe)
+      : event.timeframe
+  )}</span>
+</div>
         <div class="meta">📍 <span>${escapeHTML(event.location)}</span></div>
 
         <div class="meta">

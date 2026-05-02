@@ -1,4 +1,4 @@
-import { injectLayout, setContent, escapeHTML } from './app.js';
+import { injectLayout, setContent, escapeHTML, formatTimeframe } from './app.js';
 import { SJSU_LOCATIONS } from './data/sjsu-location.js';
 
 const BACKEND_URL = 'https://studenthub-backend-rpn0.onrender.com';
@@ -55,7 +55,7 @@ function renderSjsuEventFromQuery() {
             <span>Posted by SJSU</span>
           </div>
 
-          <div class="meta">📅 <span>${escapeHTML(time)}</span></div>
+          <div class="meta">📅 <span>${escapeHTML(formatTimeframe(event.timeframe || 'TBA'))}</span></div>
           <div class="meta">📍 <span>${escapeHTML(location)}</span></div>
 
           <p style="margin-top:1.25rem;">
