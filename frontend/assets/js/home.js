@@ -2,57 +2,113 @@ import { injectLayout, setContent, escapeHTML } from './app.js';
 
 const BACKEND_URL = 'https://studenthub-backend-rpn0.onrender.com';
 
+
+
 const homeResources = [
   {
     id: 1,
     icon: '💼',
     title: 'Career Center',
-    meta: 'Career Support',
-    desc: 'Resume reviews, interview prep, job fairs, and career support.',
-    fullDesc: 'The Career Center helps students with resume reviews, interview preparation, job fairs, internships, and career planning support.'
+    meta: 'Student Only',
+    desc: 'Career development support including resumes and interviews.',
+    previewHours: 'Mon–Fri 9 AM – 4:30 PM',
+    previewLocation: 'Admin Building',
+    badges: ['Student Only'],
+    fullDesc:
+      'Get one-on-one help with resumes, cover letters, job search strategy, interview preparation, and networking for internships and full-time roles.',
+    details: [
+      { label: 'Location', value: 'Admin Building' },
+      { label: 'Hours', value: 'Mon–Fri 9 AM – 4:30 PM' },
+      { label: 'Services', value: 'Resume reviews, mock interviews, career fairs, networking events' }
+    ]
   },
   {
     id: 2,
     icon: '🩺',
     title: 'Student Wellness Center',
-    meta: 'Health & Wellness',
-    desc: 'Medical services, counseling, wellness care, and health support.',
-    fullDesc: 'The Student Wellness Center provides medical services, counseling, wellness care, and student health support on campus.'
+    meta: 'Health Support',
+    desc: 'Medical and mental health services.',
+    previewHours: 'Mon–Fri 8:30 AM – 5 PM',
+    previewLocation: '7th Street',
+    badges: ['Health Support'],
+    fullDesc:
+      'Access medical care, counseling, lab testing, and wellness guidance in one place to support both physical and mental health.',
+    details: [
+      { label: 'Location', value: '7th Street' },
+      { label: 'Hours', value: 'Mon–Fri 8:30 AM – 5 PM' },
+      { label: 'Services', value: 'Healthcare, counseling, lab tests, nutrition support' }
+    ]
   },
   {
     id: 3,
-    icon: '🥫',
-    title: 'Spartan Food Pantry',
-    meta: 'Basic Needs',
-    desc: 'Free groceries and basic needs support for students in need.',
-    fullDesc: 'The Spartan Food Pantry offers free groceries and basic needs support for students who need food assistance.'
+    icon: '🤝',
+    title: 'SJSU Cares',
+    meta: 'Support',
+    desc: 'Support for financial and housing needs.',
+    previewHours: 'Mon–Fri 9 AM – 5 PM',
+    previewLocation: 'Clark Hall',
+    badges: ['Support'],
+    fullDesc:
+      'Connect with emergency support resources for financial hardship, housing insecurity, and referrals to campus and community services.',
+    details: [
+      { label: 'Location', value: 'Clark Hall' },
+      { label: 'Hours', value: 'Mon–Fri 9 AM – 5 PM' },
+      { label: 'Services', value: 'Emergency grants, case management, referrals' }
+    ]
   }
 ];
 
 const homeDeals = [
   {
     id: 1,
-    icon: '🎵',
-    title: 'Spotify Premium Student',
-    meta: 'Streaming Deal',
-    desc: 'Get discounted premium music streaming with student verification.',
-    fullDesc: 'Spotify Premium Student gives eligible students discounted premium streaming with verification.'
+    icon: '🎓',
+    title: 'UNiDAYS',
+    meta: 'Student Only • Online',
+    desc: 'Student discount platform.',
+    previewHours: '24/7 Online',
+    previewLocation: 'Online',
+    badges: ['Student Only', 'Online'],
+    fullDesc:
+      'Free platform that verifies student status and unlocks discounts on brands like Nike, Apple, ASOS, and more across clothing, tech, and lifestyle categories.',
+    details: [
+      { label: 'Where', value: 'Online' },
+      { label: 'Availability', value: '24/7 Online' },
+      { label: 'Best For', value: 'Clothing, tech, lifestyle, brand discounts' }
+    ]
   },
   {
     id: 2,
-    icon: '📦',
-    title: 'Amazon Prime Student',
-    meta: 'Shopping Deal',
-    desc: 'Enjoy shipping benefits, shopping offers, and student pricing.',
-    fullDesc: 'Amazon Prime Student includes delivery benefits, shopping offers, and student pricing for eligible accounts.'
+    icon: '🎓',
+    title: 'Student Beans',
+    meta: 'Student Only • Online',
+    desc: 'Student deals and discounts.',
+    previewHours: '24/7 Online',
+    previewLocation: 'Online',
+    badges: ['Student Only', 'Online'],
+    fullDesc:
+      'Another student verification platform offering exclusive discounts on fashion, tech, food, and subscriptions, often overlapping with UNiDAYS but sometimes providing unique deals.',
+    details: [
+      { label: 'Where', value: 'Online' },
+      { label: 'Availability', value: '24/7 Online' },
+      { label: 'Best For', value: 'Fashion, tech, food, subscriptions' }
+    ]
   },
   {
     id: 3,
-    icon: '📚',
-    title: 'Campus Bookstore Offers',
-    meta: 'Bookstore Deal',
-    desc: 'Check discounts on textbooks, merchandise, and school essentials.',
-    fullDesc: 'Campus Bookstore Offers include savings on textbooks, merchandise, and essential student supplies.'
+    icon: '🍎',
+    title: 'Apple Education Store',
+    meta: 'Tech • Student Pricing',
+    desc: 'Discounted Apple products.',
+    previewHours: '24/7 Online',
+    previewLocation: 'Online',
+    badges: ['Tech', 'Student Pricing'],
+    fullDesc:
+      'Offers special student pricing on MacBooks, iPads, and accessories, often bundled with gift cards during back-to-school promotions for additional savings.',
+    details: [
+      { label: 'Where', value: 'Online' },
+      { label: 'Availability', value: '24/7 Online' },
+      { label: 'Best For', value: 'MacBooks, iPads, accessories' }
+    ]
   }
 ];
 
@@ -75,15 +131,43 @@ async function getHomeEvents() {
 
 function openHomeModal(item) {
   const modal = document.getElementById('home-event-modal');
-  const icon = document.getElementById('home-event-icon');
   const title = document.getElementById('home-event-title');
   const meta = document.getElementById('home-event-meta');
   const desc = document.getElementById('home-event-desc');
 
-  icon.textContent = item.icon || '📘';
-  title.textContent = item.title;
-  meta.textContent = item.meta;
-  desc.textContent = item.fullDesc;
+  if (!item.details) {
+    title.textContent = item.title;
+    meta.textContent = item.meta || '';
+    desc.textContent = item.fullDesc || '';
+  } else {
+    title.innerHTML = `
+  <div class="home-modal-title-row">
+    <div class="home-modal-icon">${item.icon || ''}</div>
+    <span>${item.title}</span>
+  </div>
+`;
+
+    meta.innerHTML = item.badges?.length
+      ? item.badges.map(b => `<span class="badge">${b}</span>`).join(' ')
+      : '';
+
+    desc.innerHTML = `
+      
+
+      <p style="margin-bottom:1rem;">${item.fullDesc || ''}</p>
+
+      ${
+        item.details?.length
+          ? item.details.map(d => `
+            <div style="margin-bottom:0.5rem;">
+              <strong>${d.label}:</strong> ${d.value}
+            </div>
+          `).join('')
+          : ''
+      }
+    `;
+  }
+
   modal.classList.add('open');
 }
 
@@ -186,12 +270,15 @@ async function init() {
 
       <div class="home-preview-grid">
         ${homeResources.map(item => `
-          <article class="info-card preview-card preview-clickable preview-resource-card" data-resource-id="${item.id}">
-            <div class="icon-chip blue">${item.icon}</div>
-            <h3>${item.title}</h3>
-            <p>${item.desc}</p>
-          </article>
-        `).join('')}
+  <article class="info-card preview-card preview-clickable preview-resource-card" data-resource-id="${item.id}">
+    <div class="icon-chip blue">${item.icon}</div>
+    <h3>${item.title}</h3>
+    <p>${item.desc}</p>
+    <br>
+    <p class="preview-meta">${item.previewHours} </p>
+    <p>${item.previewLocation}</p>
+  </article>
+`).join('')}
       </div>
     </section>
 
@@ -204,30 +291,27 @@ async function init() {
         <a href="deals.html" class="text-link">View All</a>
       </div>
 
-      <div class="home-preview-grid">
-        ${homeDeals.map(item => `
-          <article class="info-card preview-card preview-clickable preview-deal-card" data-deal-id="${item.id}">
-            <div class="icon-chip blue">${item.icon}</div>
-            <h3>${item.title}</h3>
-            <p>${item.desc}</p>
-          </article>
-        `).join('')}
-      </div>
-    </section>
+  <div class="home-preview-grid">
+    ${homeDeals.map(item => `
+  <article class="info-card preview-card preview-clickable preview-deal-card" data-deal-id="${item.id}">
+    <div class="icon-chip blue">${item.icon}</div>
+    <h3>${item.title}</h3>
+    <p>${item.desc}</p>
+    <p class="preview-meta">${item.previewHours}</p>
+    
+  </article>
+`).join('')}
+  </div>
+</section>
 
     <div id="home-event-modal" class="modal">
       <div class="modal-panel home-event-modal-panel">
         <button class="modal-close" id="home-event-close">✕</button>
 
-        <div class="home-modal-top">
-          <div id="home-event-icon" class="home-modal-icon"></div>
-          <div class="home-modal-heading">
-            <h2 id="home-event-title"></h2>
-            <p id="home-event-meta" class="home-event-modal-meta"></p>
-          </div>
-        </div>
-
-        <p id="home-event-desc"></p>
+    <div class="home-modal-top">
+      <div class="home-modal-heading">
+        <h2 id="home-event-title"></h2>
+        <p id="home-event-meta" class="home-event-modal-meta"></p>
       </div>
     </div>
   `);
