@@ -173,10 +173,12 @@ const getAllItemsForAdmin = async (req, res) => {
 
 const updateItem = async (req, res) => {
   const { id } = req.params;
-  const { item_name, item_desc, timeframe, loc_content, img_url } = req.body;
+  const { item_name, item_desc, timeframe, loc_content } = req.body;
   const user_id = req.user.user_id;
   const isAdmin = req.headers["x-admin"] === "true";
+  
 
+  
   try {
     const existing = await pool.query(
       `SELECT * FROM items WHERE item_id = $1`,
@@ -188,6 +190,8 @@ const updateItem = async (req, res) => {
     }
 
     const item = existing.rows[0];
+
+    const img_url = req.file ? req.file.path : req.body.img_url;
 
     if (!isAdmin && item.user_id !== user_id) {
       return res.status(403).json({ error: "Not authorized to edit this item" });
@@ -208,7 +212,7 @@ const updateItem = async (req, res) => {
         item_desc ?? item.item_desc,
         timeframe ?? item.timeframe,
         loc_content ?? item.loc_content,
-        img_url ?? item.img_url,
+        img_url,
         id
       ]
     );

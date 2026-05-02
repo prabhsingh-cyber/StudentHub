@@ -20,7 +20,7 @@ router.get("/admin/all", requireAuth, getAllItemsForAdmin);
 router.get("/:id", getItemById);
 router.post("/", requireAuth, upload.single("image"), createItem);
 router.patch("/:id/approval", requireAuth, updateItemApprovalStatus);
-router.patch("/:id", requireAuth, updateItem);
+router.patch("/:id", requireAuth, upload.single("image"), updateItem);
 router.delete("/:id", requireAuth, deleteItem);
 
 module.exports = router;

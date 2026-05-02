@@ -120,8 +120,18 @@ async function loadPage() {
         </div>
 
         <div class="form-group">
-          <label for="eventImage">Event Image URL</label>
-          <input type="url" id="eventImage" value="${event.image || ''}" />
+          <label>Current Image</label>
+          ${
+            event.image
+              ? `<img src="${event.image}" alt="Current event image" style="width:100%; max-height:220px; object-fit:cover; border-radius:12px; margin-top:8px;" />`
+              : `<p>No image uploaded yet.</p>`
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="eventImage">Upload New Image</label>
+          <input type="file" id="eventImage" accept="image/png, image/jpeg" />
+          <small>Leave blank to keep the current image.</small>
         </div>
 
         <div class="form-group">
@@ -149,6 +159,7 @@ async function loadPage() {
     const endTimeValue = document.getElementById('endTime').value;
     const buildingValue = document.getElementById('locationBuilding').value;
     const roomValue = document.getElementById('locationRoom').value.trim();
+    const file = document.getElementById('eventImage').files[0];
 
     const timeframe = [
       eventDateValue,
@@ -163,23 +174,25 @@ async function loadPage() {
       ? `${buildingValue}, Room ${roomValue}`
       : buildingValue;
 
-    const payload = {
-      item_name: document.getElementById('eventTitle').value.trim(),
-      item_desc: document.getElementById('eventDetails').value.trim(),
-      timeframe,
-      loc_content: location,
-      img_url: document.getElementById('eventImage').value.trim() || null
-    };
+    const formData = new FormData();
+
+    formData.append('item_name', document.getElementById('eventTitle').value.trim());
+    formData.append('item_desc', document.getElementById('eventDetails').value.trim());
+    formData.append('timeframe', timeframe);
+    formData.append('loc_content', location);
+
+    if (file) {
+      formData.append('image', file);
+    }
 
     try {
       const updateRes = await fetch(`${BACKEND_URL}/items/${id}`, {
         method: 'PATCH',
         headers: {
-          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
           'x-admin': isAdmin ? 'true' : 'false'
         },
-        body: JSON.stringify(payload)
+        body: formData
       });
 
       const data = await updateRes.json();
