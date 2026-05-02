@@ -1,34 +1,6 @@
-import { injectLayout, setContent } from './app.js';
+import { injectLayout, setContent, escapeHTML } from './app.js';
 
-const homeEvents = [
-  {
-    id: 1,
-    icon: '💼',
-    category: 'Career',
-    title: 'Tech Career Fair 2026',
-    meta: 'Feb 12 • Event Center',
-    desc: 'Meet recruiters, explore internships, and connect with industry professionals.',
-    fullDesc: 'Meet recruiters, explore internships, and connect with industry professionals at SJSU’s Tech Career Fair 2026.'
-  },
-  {
-    id: 2,
-    icon: '🎉',
-    category: 'Community',
-    title: 'Annual Spring Festival',
-    meta: 'Mar 08 • Tower Lawn',
-    desc: 'Enjoy student performances, food stalls, and cultural celebrations on campus.',
-    fullDesc: 'Enjoy student performances, food stalls, and cultural celebrations on campus during the Annual Spring Festival.'
-  },
-  {
-    id: 3,
-    icon: '🎓',
-    category: 'Academic',
-    title: 'Guest Lecture: AI & Future',
-    meta: 'Apr 02 • Engineering Building',
-    desc: 'Join a guest speaker session on AI trends, careers, and innovation.',
-    fullDesc: 'Join a guest speaker session on AI trends, careers, and innovation with faculty and invited industry experts.'
-  }
-];
+const BACKEND_URL = 'https://studenthub-backend-rpn0.onrender.com';
 
 const homeResources = [
   {
@@ -83,6 +55,24 @@ const homeDeals = [
     fullDesc: 'Campus Bookstore Offers include savings on textbooks, merchandise, and essential student supplies.'
   }
 ];
+
+async function getHomeEvents() {
+  try {
+    const res = await fetch(`${BACKEND_URL}/items`);
+    const events = await res.json();
+
+    return events
+      .filter((event) =>
+        event.status === 'approved' ||
+        event.approval_status === 'approved'
+      )
+      .slice(0, 3);
+  } catch (err) {
+    console.error(err);
+    return [];
+  }
+}
+
 function openHomeModal(item) {
   const modal = document.getElementById('home-event-modal');
   const icon = document.getElementById('home-event-icon');
@@ -97,8 +87,10 @@ function openHomeModal(item) {
   modal.classList.add('open');
 }
 
-function init() {
+async function init() {
   injectLayout('Home');
+
+  const homeEvents = await getHomeEvents();
 
   setContent(`
     <section class="home-hero home-hero-simple">
@@ -155,14 +147,31 @@ function init() {
       </div>
 
       <div class="home-preview-grid">
-        ${homeEvents.map(event => `
-          <article class="info-card preview-card preview-clickable" data-event-id="${event.id}">
-            <div class="preview-badge">${event.category}</div>
-            <h3>${event.title}</h3>
-            <p class="preview-meta">${event.meta}</p>
-            <p>${event.desc}</p>
-          </article>
-        `).join('')}
+        ${
+          homeEvents.length === 0
+            ? `
+              <article class="info-card preview-card">
+                <h3>No upcoming events yet</h3>
+                <p>Check back later for new campus events.</p>
+              </article>
+            `
+            : homeEvents.map((event) => {
+                const eventId = event.id || event.item_id;
+                const title = event.title || event.item_name || 'Untitled Event';
+                const timeframe = event.timeframe || 'TBA';
+                const location = event.location || event.loc_content || 'TBA';
+                const desc = event.description || event.item_desc || '';
+
+                return `
+                  <a class="info-card preview-card" href="event.html?id=${eventId}">
+                    <div class="preview-badge">CampusHub Event</div>
+                    <h3>${escapeHTML(title)}</h3>
+                    <p class="preview-meta">${escapeHTML(timeframe)} • ${escapeHTML(location)}</p>
+                    <p>${escapeHTML(desc).slice(0, 110)}${desc.length > 110 ? '...' : ''}</p>
+                  </a>
+                `;
+              }).join('')
+        }
       </div>
     </section>
 
@@ -174,12 +183,11 @@ function init() {
         </div>
         <a href="resources.html" class="text-link">View All</a>
       </div>
-     
 
       <div class="home-preview-grid">
         ${homeResources.map(item => `
           <article class="info-card preview-card preview-clickable preview-resource-card" data-resource-id="${item.id}">
-            <div class="icon-chip blue">${item.id === 1 ? '💼' : item.id === 2 ? '🩺' : '🥫'}</div>
+            <div class="icon-chip blue">${item.icon}</div>
             <h3>${item.title}</h3>
             <p>${item.desc}</p>
           </article>
@@ -188,85 +196,72 @@ function init() {
     </section>
 
     <section class="container section">
-  <div class="section-heading section-heading-row">
-    <div>
-      <h2>Featured Deals</h2>
-      <p>Popular student savings and promotions.</p>
-    </div>
-    <a href="deals.html" class="text-link">View All</a>
-  </div>
+      <div class="section-heading section-heading-row">
+        <div>
+          <h2>Featured Deals</h2>
+          <p>Popular student savings and promotions.</p>
+        </div>
+        <a href="deals.html" class="text-link">View All</a>
+      </div>
 
-  <div class="home-preview-grid">
-    ${homeDeals.map(item => `
-      <article class="info-card preview-card preview-clickable preview-deal-card" data-deal-id="${item.id}">
-        <div class="icon-chip blue">${item.id === 1 ? '🎵' : item.id === 2 ? '📦' : '📚'}</div>
-        <h3>${item.title}</h3>
-        <p>${item.desc}</p>
-      </article>
-    `).join('')}
-  </div>
-</section>
+      <div class="home-preview-grid">
+        ${homeDeals.map(item => `
+          <article class="info-card preview-card preview-clickable preview-deal-card" data-deal-id="${item.id}">
+            <div class="icon-chip blue">${item.icon}</div>
+            <h3>${item.title}</h3>
+            <p>${item.desc}</p>
+          </article>
+        `).join('')}
+      </div>
+    </section>
 
     <div id="home-event-modal" class="modal">
-  <div class="modal-panel home-event-modal-panel">
-    <button class="modal-close" id="home-event-close">✕</button>
+      <div class="modal-panel home-event-modal-panel">
+        <button class="modal-close" id="home-event-close">✕</button>
 
-    <div class="home-modal-top">
-      <div id="home-event-icon" class="home-modal-icon"></div>
-      <div class="home-modal-heading">
-        <h2 id="home-event-title"></h2>
-        <p id="home-event-meta" class="home-event-modal-meta"></p>
+        <div class="home-modal-top">
+          <div id="home-event-icon" class="home-modal-icon"></div>
+          <div class="home-modal-heading">
+            <h2 id="home-event-title"></h2>
+            <p id="home-event-meta" class="home-event-modal-meta"></p>
+          </div>
+        </div>
+
+        <p id="home-event-desc"></p>
       </div>
     </div>
-
-    <p id="home-event-desc"></p>
-  </div>
-</div>
   `);
 
-  const eventCards = document.querySelectorAll('[data-event-id]');
-const resourceCards = document.querySelectorAll('[data-resource-id]');
-const dealCards = document.querySelectorAll('[data-deal-id]');
-const modal = document.getElementById('home-event-modal');
-const closeBtn = document.getElementById('home-event-close');
+  const resourceCards = document.querySelectorAll('[data-resource-id]');
+  const dealCards = document.querySelectorAll('[data-deal-id]');
+  const modal = document.getElementById('home-event-modal');
+  const closeBtn = document.getElementById('home-event-close');
 
-eventCards.forEach((card) => {
-  card.addEventListener('click', () => {
-    const id = Number(card.dataset.eventId);
-    const item = homeEvents.find((event) => event.id === id);
-    if (item) openHomeModal({
-  icon: item.icon,
-  title: item.title,
-  meta: `${item.category} • ${item.meta}`,
-  fullDesc: item.fullDesc
-});
+  resourceCards.forEach((card) => {
+    card.addEventListener('click', () => {
+      const id = Number(card.dataset.resourceId);
+      const item = homeResources.find((resource) => resource.id === id);
+      if (item) openHomeModal(item);
+    });
   });
-});
 
-resourceCards.forEach((card) => {
-  card.addEventListener('click', () => {
-    const id = Number(card.dataset.resourceId);
-    const item = homeResources.find((resource) => resource.id === id);
-    if (item) openHomeModal(item);
+  dealCards.forEach((card) => {
+    card.addEventListener('click', () => {
+      const id = Number(card.dataset.dealId);
+      const item = homeDeals.find((deal) => deal.id === id);
+      if (item) openHomeModal(item);
+    });
   });
-});
 
-dealCards.forEach((card) => {
-  card.addEventListener('click', () => {
-    const id = Number(card.dataset.dealId);
-    const item = homeDeals.find((deal) => deal.id === id);
-    if (item) openHomeModal(item);
-  });
-});
-
-closeBtn.addEventListener('click', () => {
-  modal.classList.remove('open');
-});
-
-window.addEventListener('click', (e) => {
-  if (e.target === modal) {
+  closeBtn.addEventListener('click', () => {
     modal.classList.remove('open');
-  }
-});
+  });
+
+  window.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.classList.remove('open');
+    }
+  });
 }
+
 init();
