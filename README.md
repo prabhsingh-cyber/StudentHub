@@ -1,4 +1,4 @@
-# StudentHub 🎓
+# CampusHub 🎓
 A web-based platform for San Jose State University students to discover events, academic resources, and deals — all in one place.
 
 ## 👥 Team
