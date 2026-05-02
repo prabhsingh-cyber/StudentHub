@@ -304,16 +304,20 @@ async function init() {
   </div>
 </section>
 
-    <div id="home-event-modal" class="modal">
-      <div class="modal-panel home-event-modal-panel">
-        <button class="modal-close" id="home-event-close">✕</button>
+        <div id="home-event-modal" class="modal">
+          <div class="modal-panel home-event-modal-panel">
+            <button class="modal-close" id="home-event-close">✕</button>
 
-    <div class="home-modal-top">
-      <div class="home-modal-heading">
-        <h2 id="home-event-title"></h2>
-        <p id="home-event-meta" class="home-event-modal-meta"></p>
-      </div>
-    </div>
+            <div class="home-modal-top">
+              <div class="home-modal-heading">
+                <h2 id="home-event-title"></h2>
+                <p id="home-event-meta" class="home-event-modal-meta"></p>
+              </div>
+            </div>
+
+            <div id="home-event-desc"></div>
+          </div>
+        </div>
   `);
 
   const resourceCards = document.querySelectorAll('[data-resource-id]');
@@ -337,9 +341,9 @@ async function init() {
     });
   });
 
-  closeBtn.addEventListener('click', () => {
-    modal.classList.remove('open');
-  });
+  closeBtn?.addEventListener('click', () => {
+  modal.classList.remove('open');
+});
 
   window.addEventListener('click', (e) => {
     if (e.target === modal) {
