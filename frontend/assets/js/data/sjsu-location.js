@@ -37,8 +37,12 @@ export const SJSU_LOCATIONS = [
     mapQuery: 'Dr. Martin Luther King Jr. Library, San Jose, CA'
   },
   {
-    name: 'Science Building',
-    mapQuery: 'Science Building, San Jose State University, San Jose, CA'
+    name: 'Natural Science Building',
+    mapQuery: 'Natural Science Building, San Jose State University, San Jose, CA'
+  },
+  {
+    name : 'Interdisciplinary Science Building',
+    mapQuery: 'Interdisciplinary Science Building, San Jose State University, San Jose, CA'
   },
   {
     name: 'Sweeney Hall',
