@@ -1,52 +1,41 @@
-# CampusHub 🎓
-A web-based platform for San Jose State University students to discover events, academic resources, and deals — all in one place.
+CampusHub 🎓
+A web-based platform for San Jose State University students to discover events, academic resources, and deals in one place.
+👥 Team
 
-## 👥 Team
-- Arvin Andiappan
-- Prabhjot Singh
-- Rafael Caculba
-- Ved Dabhi
+Arvin Andiappan
+Prabhjot Singh
+Rafael Caculba
+Ved Jigneshkumar Dabhi
 
-**Course:** CMPE 131 - Software Engineering I  
-**Professor:** Ishie Eswar  
-**University:** San Jose State University
+Course: CMPE 131 - Software Engineering I
+Professor: Ishie Eswar
+University: San Jose State University
 
----
-
-## 📋 About the Project
+📋 About the Project
 CampusHub allows SJSU students to:
-- Browse current campus events
-- Discover local deals and discounts
-- Access academic resources
-- View item locations on an interactive map
-- Leave reviews and ratings
-- Sign up and log in securely
 
----
+Browse current campus events
+Discover local deals and discounts
+Access academic resources
+View item locations on an interactive map
+Leave reviews and ratings
+Sign up and log in securely with their SJSU Google account
 
-## 🏗️ Architecture
-CampusHub follows a **3-Tier Client-Server Architecture**:
 
-```
+🏗️ Architecture
+CampusHub follows a 3-Tier Client-Server Architecture:
 User → Frontend (HTML/CSS/JS) → Backend (Node.js/Express) → Database (PostgreSQL)
-```
 
-- **Frontend** — HTML, CSS, JavaScript
-- **Backend** — Node.js with Express
-- **Database** — PostgreSQL
+Frontend — HTML, CSS, JavaScript (hosted on Netlify)
+Backend — Node.js with Express (hosted on Render)
+Database — PostgreSQL (hosted on NeonDB)
 
----
 
-## 🚀 Getting Started
+🚀 Getting Started
+CampusHub is live and accessible at: https://hub4campus.netlify.app/
+No installation required — just visit the link and sign in with your SJSU Google account!
 
-CampusHub is live and accessible at:
-**https://hub4campus.netlify.app/**
-
-No installation required, just visit the link and sign in with your SJSU Google account!
-
-## 📁 Project Structure
-
-```
+📁 Project Structure
 SJSU-Software-Engineering-Project/
 ├── frontend/
 │   ├── HTML/          # All HTML pages
@@ -67,46 +56,20 @@ SJSU-Software-Engineering-Project/
 │       ├── app.js         # Express app setup
 │       └── server.js      # Server entry point
 └── README.md
-```
 
----
+🔌 API Endpoints
+Auth
+MethodEndpointDescriptionPOST/auth/googleAuthenticate via Google OAuth
+Items
+MethodEndpointDescriptionGET/itemsGet all itemsPOST/itemsAdd a new item (auth required)DELETE/items/:idRemove an item (auth required)
+Reviews
+MethodEndpointDescriptionGET/items/:id/reviewsGet reviews for an itemPOST/reviewsSubmit a review (auth required)DELETE/reviews/:idDelete a review (auth required)
 
-## 🔌 API Endpoints
+🗺️ Features by Sprint
+SprintFocusKey FeaturesSprint 1Core FoundationDatabase setup, backend API, navbar, item cardsSprint 2Map & InterfaceGoogle Maps integration, sorting, filteringSprint 3AuthenticationGoogle OAuth login, JWT route protectionSprint 4Reviews & LaunchReview system, testing, deployment, UI polish
 
-### Auth
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/auth/signup` | Register a new user |
-| POST | `/api/auth/login` | Log in an existing user |
+🔐 Security
 
-### Items
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/items` | Get all items |
-| POST | `/api/items` | Add a new item (auth required) |
-| DELETE | `/api/items/:id` | Remove an item (auth required) |
-
-### Reviews
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/reviews` | Get all reviews |
-| POST | `/api/reviews` | Submit a review (auth required) |
-| DELETE | `/api/reviews/:id` | Delete a review (auth required) |
-
----
-
-## 🗺️ Features by Sprint
-
-| Sprint | Focus | Key Features |
-|--------|-------|-------------|
-| Sprint 1 | Core Foundation | Database setup, backend API, navbar, item cards |
-| Sprint 2 | Map & Interface | Google Maps integration, sorting, filtering |
-| Sprint 3 | Authentication | User login/signup, password hashing, route protection |
-| Sprint 4 | Reviews & Launch | Review system, testing, deployment, UI polish |
-
----
-
-## 🔐 Security
-- Passwords are hashed before being stored in the database
-- Restricted routes require authentication
-- Input validation on all API endpoints
+Authentication is handled entirely through Google OAuth 2.0, restricted to @sjsu.edu email addresses
+Protected routes require a valid JWT token
+Input validation on all API endpoints
