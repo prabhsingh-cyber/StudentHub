@@ -2,6 +2,8 @@ import { injectLayout, setContent, escapeHTML, formatTimeframe } from './app.js'
 import { SJSU_LOCATIONS } from './data/sjsu-location.js';
 
 const BACKEND_URL = 'https://studenthub-backend-rpn0.onrender.com';
+const DEFAULT_EVENT_IMAGE = 'assets/images/event-placeholder.png';
+const SJSU_LOGO = 'assets/images/sjsu-logo.png';
 
 function getBuildingFromLocation(location = '') {
   return location.split(', Room')[0].trim();
@@ -29,18 +31,19 @@ function renderSjsuEventFromQuery() {
   const title = params.get('title') || 'SJSU Event';
   const time = params.get('time') || 'TBA';
   const location = params.get('location') || 'SJSU Campus';
-  const image = params.get('image') || 'https://via.placeholder.com/800x400';
+  const image = params.get('image') || DEFAULT_EVENT_IMAGE;
   const url = params.get('url') || 'https://events.sjsu.edu/';
 
   setContent(`
     <section class="container page-header">
       <a class="back-link" href="events.html">← Back to Events</a>
+
       <div class="detail-hero">
         <img
           class="detail-image"
-          src="${image}"
+          src="${escapeHTML(image)}"
           alt="${escapeHTML(title)}"
-          onerror="this.src='https://via.placeholder.com/800x400'"
+          onerror="this.src='${DEFAULT_EVENT_IMAGE}'"
         >
 
         <div class="detail-panel">
@@ -48,32 +51,39 @@ function renderSjsuEventFromQuery() {
 
           <div class="meta" style="display:flex; align-items:center; gap:10px; margin-top:8px;">
             <img
-              src="../assets/images/spartans-logo.png"
+              src="${SJSU_LOGO}"
               alt="SJSU"
               style="width:32px; height:32px; border-radius:50%; object-fit:cover;"
+              onerror="this.remove()"
             />
             <span>Posted by SJSU</span>
           </div>
 
-          <div class="meta">📅 <span>${escapeHTML(formatTimeframe(event.timeframe || 'TBA'))}</span></div>
+          <div class="meta">📅 <span>${escapeHTML(time)}</span></div>
           <div class="meta">📍 <span>${escapeHTML(location)}</span></div>
 
           <p style="margin-top:1.25rem;">
-            This event comes from the official SJSU events feed.
+            This event is officially hosted by SJSU.
           </p>
 
           <div style="margin-top:1.25rem;">
             <a
-              class="btn btn-primary"
-              href="${url}"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              View Official Event
-            </a>
+  class="btn btn-primary event-detail-btn"
+  href="${escapeHTML(url)}"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  <span>View Official Event</span>
+  <span class="arrow">🔗</span>
+</a>
           </div>
         </div>
       </div>
+    </section>
+
+    <section class="container section-tight">
+      <h2>Location</h2>
+      <iframe class="map-frame" src="${buildMapEmbedUrl(location)}"></iframe>
     </section>
   `);
 }
@@ -106,7 +116,12 @@ async function renderLocalEvent() {
     <section class="container page-header">
       <a class="back-link" href="events.html">← Back to Events</a>
       <div class="detail-hero">
-        <img class="detail-image" src="${event.image || 'https://via.placeholder.com/800x400'}" alt="${escapeHTML(event.title)}">
+        <img
+  class="detail-image"
+  src="${event.image || DEFAULT_EVENT_IMAGE}"
+  alt="${escapeHTML(event.title)}"
+  onerror="this.src='${DEFAULT_EVENT_IMAGE}'"
+/>
         <div class="detail-panel">
           <h1>${escapeHTML(event.title)}</h1>
 
@@ -164,7 +179,7 @@ async function renderLocalEvent() {
                       src="${escapeHTML(r.pfp_url || 'https://via.placeholder.com/40')}"
                       alt="${escapeHTML(r.user_name || 'User')}"
                       style="width:40px; height:40px; border-radius:50%; object-fit:cover;"
-                      onerror="this.src='https://via.placeholder.com/40'"
+                      onerror="this.src='${DEFAULT_EVENT_IMAGE}'"
                     />
                     <strong>${escapeHTML(r.user_name || 'User')}</strong>
                   </div>

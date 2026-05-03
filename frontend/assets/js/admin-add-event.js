@@ -71,9 +71,9 @@ function init() {
         </div>
 
         <div class="form-group">
-          <label for="eventImage">Upload Image</label>
-          <input type="file" id="eventImage" accept="image/png, image/jpeg" />
-        </div>
+  <label for="eventImage">Upload Image</label>
+  <input id="eventImage" name="eventImage" type="file" accept="image/*">
+</div>
 
         <div class="form-group">
           <label for="eventDetails">Event Details</label>
@@ -95,7 +95,7 @@ function init() {
   const endTime = document.getElementById('endTime').value;
   const building = document.getElementById('locationBuilding').value;
   const room = document.getElementById('locationRoom').value.trim();
-  const imageFile = document.getElementById('eventImageFile')?.files?.[0];
+  const file = document.getElementById('eventImage')?.files?.[0];
 
   const timeframe = [
     eventDate,
@@ -113,10 +113,10 @@ function init() {
   formData.append('timeframe', timeframe);
   formData.append('loc_content', location);
 
-  if (imageFile) {
-    formData.append('image', imageFile);
+  if (file) {
+    formData.append('image', file);
   }
-
+console.log('ADMIN FILE:', file);
   try {
     const res = await fetch(`${BACKEND_URL}/items`, {
       method: 'POST',

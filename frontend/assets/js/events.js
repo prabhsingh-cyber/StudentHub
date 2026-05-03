@@ -3,17 +3,30 @@ import { injectLayout, setContent, escapeHTML, formatTimeframe } from './app.js'
 const BACKEND_URL = 'https://studenthub-backend-rpn0.onrender.com';
 const SJSU_EVENTS_API = 'https://events.sjsu.edu/api/2/events';
 
+
+
 const DEFAULT_EVENT_IMAGE = 'assets/images/event-placeholder.png';
-const SJSU_LOGO = '../assets/images/sjsu-logo.png';
+const SJSU_LOGO = '../assets/images/spartans-logo.png';
+function getEventImage(event) {
+  const image = event.image || event.img_url;
+
+  if (!image) return DEFAULT_EVENT_IMAGE;
+
+  if (image.startsWith('http')) return image;
+
+  return `${BACKEND_URL}${image.startsWith('/') ? image : `/${image}`}`;
+}
 
 function mapLocalEvent(event) {
+  
   const eventId = event.id || event.item_id;
 
+  
   return {
     source: 'local',
     id: eventId,
     title: event.title || event.item_name || 'Untitled Event',
-    image: event.image || event.img_url || DEFAULT_EVENT_IMAGE,
+    image: getEventImage(event),
     user_name: event.user_name || 'User',
     pfp_url: event.pfp_url || '',
     timeframe: event.timeframe || 'TBA',
@@ -43,7 +56,10 @@ function mapSjsuEvent(wrapper) {
     event.geo?.street ||
     'SJSU Campus';
 
-  const detailUrl = event.url || 'https://events.sjsu.edu/';
+    const detailUrl =
+  event.event_instances?.[0]?.url ||
+  event.url ||
+  `https://events.sjsu.edu/?search=${encodeURIComponent(title)}`;
 
   const externalId = event.id || title;
 

@@ -73,10 +73,11 @@ function init() {
           <textarea id="description" name="description" placeholder="Enter event description" required></textarea>
         </div>
 
+        
         <div class="form-group">
-          <label for="eventImage">Upload Image</label>
-          <input type="file" id="eventImage" accept="image/png, image/jpeg">
-        </div>
+  <label for="eventImage">Upload Image</label>
+  <input id="eventImage" name="eventImage" type="file" accept="image/*">
+</div>
 
         <button class="btn btn-primary full-width" type="submit">Submit Event</button>
         <p class="form-note">Event will be visible after approval (may take up to 48 hours).</p>
