@@ -162,7 +162,7 @@ Open frontend/index.html with Live Server
 
 ## 🔐 Security
 
-- Google OAuth restricted to @sjsu.edu  
+- Google OAuth restricted to @sjsu.edu   
 - JWT authentication for protected routes  
 - Backend input validation  
 - .env protected via .gitignore  
