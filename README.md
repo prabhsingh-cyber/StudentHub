@@ -1,4 +1,5 @@
 🎓 CampusHub (StudentHub)
+
 ![Netlify](https://img.shields.io/badge/Frontend-Netlify-blue?logo=netlify)
 ![Render](https://img.shields.io/badge/Backend-Render-purple?logo=render)
 ![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-blue?logo=postgresql)
