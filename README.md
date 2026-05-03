@@ -7,6 +7,10 @@
 ![Status](https://img.shields.io/badge/Status-Active-success)
 ![Contributions](https://img.shields.io/badge/Contributions-Welcome-brightgreen)
 
+![Repo Size](https://img.shields.io/github/repo-size/prabhsingh-cyber/StudentHub)
+![Stars](https://img.shields.io/github/stars/prabhsingh-cyber/StudentHub?style=social)
+![Forks](https://img.shields.io/github/forks/prabhsingh-cyber/StudentHub?style=social)
+
 A modern, full-stack web platform designed for San José State University (SJSU) students to discover campus events, resources, and exclusive deals — all in one place.
 
 🔗 Live Site: https://hub4campus.netlify.app/
