@@ -1,18 +1,17 @@
-function formatItem(item) {
+function formatItem(row) {
   return {
-    id: item.item_id,
-    title: item.item_name,
-    description: item.item_desc,
-    timeframe: item.timeframe,
-    location: item.loc_content,
-    image: item.img_url,
-
-    // new fields
-    user_name: item.user_name,
-    pfp_url: item.pfp_url,
-
-    approval_status: item.approval_status,
+    id: row.item_id,
+    title: row.item_name,
+    description: row.item_desc,
+    timeframe: row.timeframe,
+    location: row.loc_content,
+    image: row.img_url,
+    img_url: row.img_url,
+    user_name: row.user_name,
+    pfp_url: row.pfp_url,
+    approval_status: row.approval_status,
+    status: row.approval_status
   };
-}
+};
 
 module.exports = formatItem;
