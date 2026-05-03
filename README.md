@@ -102,26 +102,8 @@ Hosting: Netlify (Frontend), Render (Backend)
 
 ## 📁 Project Structure
 
-StudentHub/
-├── frontend/
-│   ├── HTML/
-│   ├── assets/
-│   │   ├── css/
-│   │   ├── js/
-│   │   ├── images/
-│   │   └── icons/
-│   └── data/
-├── backend/
-│   └── src/
-│       ├── controllers/
-│       ├── routes/
-│       ├── middleware/
-│       ├── config/
-│       ├── utils/
-│       ├── app.js
-│       └── server.js
-├── database/
-└── README.md
+<img width="231" height="422" alt="image" src="https://github.com/user-attachments/assets/76258799-55da-4b45-ab37-4670b7225be9" />
+
 
 ---
 
