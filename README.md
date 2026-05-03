@@ -1,4 +1,11 @@
 🎓 CampusHub (StudentHub)
+![Netlify](https://img.shields.io/badge/Frontend-Netlify-blue?logo=netlify)
+![Render](https://img.shields.io/badge/Backend-Render-purple?logo=render)
+![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-blue?logo=postgresql)
+![Node.js](https://img.shields.io/badge/Backend-Node.js-green?logo=node.js)
+![License](https://img.shields.io/badge/License-MIT-yellow)
+![Status](https://img.shields.io/badge/Status-Active-success)
+![Contributions](https://img.shields.io/badge/Contributions-Welcome-brightgreen)
 
 A modern, full-stack web platform designed for San José State University (SJSU) students to discover campus events, resources, and exclusive deals — all in one place.
 
